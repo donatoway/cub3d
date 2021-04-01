@@ -1,0 +1,65 @@
+.PHONY: libft minilibx
+
+SRCS = ./srcs/check_map.c \
+	   ./srcs/main.c \
+	   ./srcs/utils.c \
+	   ./srcs/utils2.c \
+	   ./srcs/utils3.c \
+	   ./srcs/startgame.c \
+	   ./srcs/new_image.c \
+	   ./srcs/parser.c \
+	   ./srcs/parser_tex.c \
+	   ./srcs/events.c \
+	   ./srcs/exit.c \
+	   ./srcs/move.c \
+	   ./srcs/display.c \
+	   ./srcs/ray.c \
+	   ./srcs/ray2.c \
+	   ./srcs/save.c \
+	   ./srcs/save2.c \
+	   ./srcs/sprite.c \
+	   ./srcs/sprite2.c \
+	   ./srcs/sprite3.c \
+	   ./srcs/free.c \
+	   ./srcs/error.c \
+	   ./srcs/textures.c \
+	   ./GNL/get_next_line.c \
+	   ./GNL/get_next_line_utils.c \
+		
+
+NAME = Cub3D
+
+GCC_FLAG = -Wall -Werror -Wextra -g
+CC = gcc $(GCC_FLAG)
+
+OBJS = $(SRCS:.c=.o)
+
+
+all: libft minilibx $(NAME)
+
+libft:
+	make -C libft/
+
+minilibx:
+	make -C minilibx/
+
+
+$(%.o): $(%.c)
+	$(CC) -o $@ -c $^
+
+$(NAME): $(OBJS)
+	$(CC) -o $@ $^ -Lminilibx/ -lmlx -framework OPENGL -framework Appkit -Llibft -lft
+
+
+clean:
+	rm -f $(OBJS)
+	make -Clibft/ clean
+	make -C minilibx/ clean
+
+fclean: clean
+	rm -f $(NAME)
+	make -C libft/ fclean
+	make -C minilibx/ clean
+
+re: fclean all
+
